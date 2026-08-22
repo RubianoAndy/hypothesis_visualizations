@@ -192,10 +192,22 @@ p5 <- ggplot(df, aes(x = temperatura_c, y = consumo_kwh, color = sector)) +
 ggsave(file.path(figures_dir, "fig5_dispersion_sectores.png"), p5, width = 8, height = 5, dpi = 150)
 
 # Version interactiva (opcional): requiere install.packages(c("plotly", "htmlwidgets"))
+#
+# saveWidget() genera por defecto un HTML autocontenido, pero para empotrar las
+# librerias JS necesita pandoc, que Rscript no siempre encuentra. Si no esta
+# disponible se guarda la version con carpeta "_files" adjunta, que es igual de
+# interactiva; en ningun caso se interrumpe la ejecucion del script.
 if (requireNamespace("plotly", quietly = TRUE) && requireNamespace("htmlwidgets", quietly = TRUE)) {
   interactive_fig <- plotly::ggplotly(p5)
-  htmlwidgets::saveWidget(interactive_fig, file.path(figures_dir, "fig5_interactivo_r.html"))
-  cat("[OK] Version interactiva -> fig5_interactivo_r.html\n")
+  widget_path <- file.path(figures_dir, "fig5_interactivo_r.html")
+  saved <- tryCatch({
+    htmlwidgets::saveWidget(interactive_fig, widget_path, selfcontained = TRUE)
+    "autocontenido"
+  }, error = function(e) {
+    htmlwidgets::saveWidget(interactive_fig, widget_path, selfcontained = FALSE)
+    "con carpeta _files (pandoc no disponible)"
+  })
+  cat("[OK] Version interactiva ->", basename(widget_path), "-", saved, "\n")
 } else {
   cat("[AVISO] Paquete 'plotly' no instalado en R; solo se genero el PNG de la figura 5.\n")
 }

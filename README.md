@@ -19,7 +19,7 @@
 | **Unidad** | Unidad 2 · Pruebas de hipótesis y visualización interactiva |
 | **Programa** | Maestría en Inteligencia Artificial |
 | **Universidad** | Universidad de La Salle |
-| **Herramientas** | Python 3.10+ (SciPy + statsmodels + Matplotlib + Seaborn + Plotly) y R 4.x (ggplot2) |
+| **Herramientas** | Python 3.14.7 (SciPy + statsmodels + Matplotlib + Seaborn + Plotly) y R 4.6.1 (ggplot2 + plotly) |
 | **Año** | 2026 |
 | **Estado** | Completado |
 
@@ -79,9 +79,9 @@ El proyecto desarrolla:
 │           ├── author/                           # Foto del autor
 │           └── figures/
 │               ├── python/
-│               │   └── hypothesis/               # 4 figuras PNG (Matplotlib/Seaborn) + 1 HTML (Plotly)
+│               │   └── hypothesis/               # 5 figuras PNG + el HTML interactivo de Plotly
 │               └── r/
-│                   └── hypothesis/               # Las 5 figuras replicadas con ggplot2
+│                   └── hypothesis/               # Las 5 réplicas en ggplot2 + el HTML de ggplotly
 └── utils/
     └── codes/
         ├── hypothesis_testing.py                 # Dataset, cinco pruebas y cinco figuras (Python)
@@ -132,7 +132,7 @@ El flujo es **secuencial**: Python genera los datos, ejecuta las cinco pruebas, 
 | ANOVA | `data/processed/anova_results.csv` | Suma de cuadrados, grados de libertad, F y `PR(>F)` |
 | Post-hoc | `data/processed/tukey_posthoc.csv` | Las tres comparaciones por pares con IC del 95 % |
 | Regresión | `data/processed/regression_results.csv` | Pearson global y por sector, $b_0$, $b_1$ y $R^2$ |
-| Figuras | `public/assets/images/figures/python/hypothesis/` | 4 PNG estáticos + 1 HTML interactivo |
+| Figuras | `public/assets/images/figures/python/hypothesis/` | 5 PNG estáticos + el HTML interactivo de la Figura 5 |
 
 ### Fase 2 · Recálculo y verificación en R
 
@@ -157,23 +157,25 @@ El flujo es **secuencial**: Python genera los datos, ejecuta las cinco pruebas, 
 
 ### Python
 
-> ⚠️ **Versión:** Python 3.10 o superior, con entorno virtual dedicado (`venv/`).
+> ⚠️ **Versión:** Python 3.10 o superior, con entorno virtual dedicado (`venv/`). Probado en **3.14.7**.
 
-| Dependencia | Versión mínima | Uso |
-|---|---|---|
-| `numpy` | 1.24 | Generación del dataset con semilla fija |
-| `pandas` | 2.0 | Estructuración de datos y exportación de las tablas a CSV |
-| `scipy` | 1.10 | Shapiro-Wilk, Levene, t de Student y Pearson |
-| `statsmodels` | 0.14 | ANOVA (`ols` + `anova_lm`), Tukey HSD y regresión OLS |
-| `matplotlib` | 3.7 | Figuras 1 y 3 |
-| `seaborn` | 0.13 | Figuras 2 y 4, y el tema visual común |
-| `plotly` | 5.18 | Figura 5 interactiva |
-| `kaleido` | 0.2 | Exportación del PNG estático de Plotly (**opcional**, requiere Chrome) |
+| Dependencia | Mínima | Probada | Uso |
+|---|---|---|---|
+| `numpy` | 1.24 | 2.5.2 | Generación del dataset con semilla fija |
+| `pandas` | 2.0 | 3.0.5 | Estructuración de datos y exportación de las tablas a CSV |
+| `scipy` | 1.10 | 1.18.1 | Shapiro-Wilk, Levene, t de Student y Pearson |
+| `statsmodels` | 0.14 | 0.14.6 | ANOVA (`ols` + `anova_lm`), Tukey HSD y regresión OLS |
+| `matplotlib` | 3.7 | 3.11.1 | Figuras 1 y 3 |
+| `seaborn` | 0.13 | 0.13.2 | Figuras 2 y 4, y el tema visual común |
+| `plotly` | 5.18 | 6.9.0 | Figura 5 interactiva |
+| `kaleido` | 0.2 | 1.3.0 | Exportación del PNG estático de Plotly |
+
+> ℹ️ **Sobre el PNG de Plotly:** desde `kaleido` 1.x la exportación la resuelve `choreographer`, que descarga su propio navegador la primera vez. Ya no hace falta instalar Chrome ni ejecutar `plotly_get_chrome` manualmente.
 
 ### R
 
-- **R 4.x** — requiere **`ggplot2`** para las cinco réplicas.
-- Opcional: `plotly` y `htmlwidgets` para la versión interactiva vía `ggplotly`.
+- **R 4.x** (probado en **4.6.1**) — requiere **`ggplot2`** (probado en 4.0.3) para las cinco réplicas.
+- `plotly` y `htmlwidgets` para la versión interactiva vía `ggplotly` — recomendados, ya que la actividad pide visualización interactiva también en RStudio.
 - Las pruebas estadísticas usan funciones de R base (`stats`): `shapiro.test`, `bartlett.test`, `t.test`, `aov`, `TukeyHSD`, `cor.test` y `lm` — sin dependencias adicionales.
 - Editor: RStudio Desktop o VS Code con la extensión **R** (REditorSupport) + `languageserver`.
 
@@ -208,7 +210,7 @@ Si `Rscript` no está en el `PATH` de Git Bash, añádelo a la sesión antes del
 export PATH="/c/Program Files/R/R-4.6.1/bin/x64:$PATH"
 ```
 
-> ℹ️ El PNG estático de la figura de Plotly requiere Chrome (`plotly_get_chrome`). Si no está disponible, el script avisa por consola y **el HTML interactivo se genera igual**.
+Ambos scripts terminan con código de salida `0`. El de R guarda la figura interactiva como HTML autocontenido cuando encuentra **pandoc**; si no —el caso habitual al invocarlo con `Rscript`— la guarda con su carpeta `fig5_interactivo_r_files/` adjunta, que es igual de interactiva. En ninguno de los dos casos se interrumpe la ejecución.
 
 ---
 
@@ -228,7 +230,13 @@ export PATH="/c/Program Files/R/R-4.6.1/bin/x64:$PATH"
 
 ### Figura interactiva (Python · Plotly)
 
-La **Figura 5** se exporta como [`fig5_interactivo_plotly.html`](public/assets/images/figures/python/hypothesis/fig5_interactivo_plotly.html): al abrirla en el navegador permite hacer zoom, aislar sectores desde la leyenda y ver el identificador y la región de cada cliente al pasar el ratón. Incluye una recta de regresión **por sector** (`trendline="ols"`), que es justamente la que hace evidente el hallazgo central.
+<div align="center">
+    <img src="public/assets/images/figures/python/hypothesis/fig5_interactivo_plotly.png" width="820" alt="Consumo vs temperatura por sector, figura interactiva de Plotly">
+</div>
+
+**Figura 5 · Consumo vs. temperatura por sector (Plotly)** — tres rectas de regresión **paralelas y de pendiente positiva**, separadas por el nivel de cada sector. Es la imagen que explica el hallazgo central: la relación existe dentro de cada grupo, pero al mezclarlos la distancia vertical entre ellos la anula.
+
+La versión interactiva se exporta como [`fig5_interactivo_plotly.html`](public/assets/images/figures/python/hypothesis/fig5_interactivo_plotly.html): al abrirla en el navegador permite hacer zoom, aislar sectores desde la leyenda y ver el identificador y la región de cada cliente al pasar el ratón. El PNG de arriba es la captura estática que genera `kaleido` para insertarla en el informe.
 
 ### Réplica en R (ggplot2)
 
@@ -245,7 +253,7 @@ Las cinco figuras tienen su equivalente en ggplot2, construidas sobre estadísti
     <img src="public/assets/images/figures/r/hypothesis/fig5_dispersion_sectores.png" width="820" alt="Dispersión por sector en ggplot2">
 </div>
 
-**Figura 5R · Dispersión por sector (ggplot2)** — la versión estática de la figura interactiva de Plotly, con una recta de regresión por sector. Si el paquete `plotly` está instalado, el script la convierte además en interactiva con `ggplotly`.
+**Figura 5R · Dispersión por sector (ggplot2)** — la réplica de la Figura 5, con una recta de regresión por sector y las mismas tres pendientes paralelas. El script la convierte además en interactiva con `ggplotly`, guardándola en [`fig5_interactivo_r.html`](public/assets/images/figures/r/hypothesis/fig5_interactivo_r.html): la contraparte en RStudio de la figura de Plotly, con el mismo zoom, filtrado por leyenda y *hover*.
 
 ---
 
