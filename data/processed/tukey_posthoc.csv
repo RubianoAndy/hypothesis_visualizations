@@ -1,0 +1,4 @@
+group1,group2,meandiff,p-adj,lower,upper,reject
+Comercial,Industrial,456.371,0.0,413.84,498.902,True
+Comercial,Residencial,-244.327,0.0,-286.858,-201.796,True
+Industrial,Residencial,-700.698,0.0,-743.229,-658.167,True

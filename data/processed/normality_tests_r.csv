@@ -1,0 +1,5 @@
+"prueba","grupo","estadistico","p_valor","decision"
+"Shapiro-Wilk (R)","Comercial",0.9868,0.4246,"No se rechaza H0 (normal)"
+"Shapiro-Wilk (R)","Industrial",0.9933,0.9069,"No se rechaza H0 (normal)"
+"Shapiro-Wilk (R)","Residencial",0.9912,0.7628,"No se rechaza H0 (normal)"
+"Bartlett (R)","Los 3 sectores",199.3908,0,"Varianzas distintas"

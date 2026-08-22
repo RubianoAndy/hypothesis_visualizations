@@ -1,0 +1,2 @@
+prueba,grupo_1,media_1,grupo_2,media_2,estadistico_t,p_valor,decision
+t de Student (Welch),Residencial,186.98,Comercial,431.3,-23.5384,0.0,Se rechaza H0: las medias son diferentes

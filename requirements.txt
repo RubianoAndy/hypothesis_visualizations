@@ -1,0 +1,15 @@
+# Analisis de datos
+pandas>=2.0
+numpy>=1.24
+
+# Pruebas de hipotesis
+scipy>=1.10
+statsmodels>=0.14
+
+# Visualizacion
+matplotlib>=3.7
+seaborn>=0.13
+plotly>=5.18
+
+# Exportar figuras de Plotly a PNG (opcional, requiere Chrome)
+kaleido>=0.2

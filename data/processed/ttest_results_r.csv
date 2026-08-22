@@ -1,0 +1,2 @@
+"prueba","media_residencial","media_comercial","estadistico_t","p_valor","decision"
+"t de Student - t.test (R)",186.98,431.3,-23.5384,"2.275e-49","Se rechaza H0: las medias son diferentes"

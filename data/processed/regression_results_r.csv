@@ -1,0 +1,5 @@
+"prueba","r_pearson","p_valor","intercepto_b0","pendiente_b1","r_cuadrado","decision"
+"Pearson (cor.test) + lm (R)",0.063,"0.2768",425.65,3.42,0.004,"Sin relacion significativa"
+"Pearson (Comercial)",0.1829,"0.06852",NA,NA,NA,"Sin relacion significativa"
+"Pearson (Industrial)",0.2115,"0.03469",NA,NA,NA,"Relacion significativa"
+"Pearson (Residencial)",0.5946,"6.912e-11",NA,NA,NA,"Relacion significativa"

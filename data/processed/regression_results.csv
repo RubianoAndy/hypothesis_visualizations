@@ -1,0 +1,5 @@
+prueba,r_pearson,p_valor,intercepto_b0,pendiente_b1,r_cuadrado,decision
+Pearson + OLS (global),0.063,0.276803,425.65,3.42,0.004,Sin relacion significativa
+Pearson (Comercial),0.1829,0.068524,,,,Sin relacion significativa
+Pearson (Industrial),0.2115,0.034695,,,,Relacion significativa
+Pearson (Residencial),0.5946,0.0,,,,Relacion significativa
