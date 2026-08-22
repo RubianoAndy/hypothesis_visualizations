@@ -1,54 +1,25 @@
-# Git ignore para proyecto LaTeX
-# Ignorar archivos intermedios generados por LaTeX
-*.aux
-*.bbl
-*.blg
-*.brf
-*.log
-*.out
-*.toc
-*.lof
-*.lot
-*.fls
-*.fdb_latexmk
-*.synctex.gz
-*.nav
-*.snm
-*.vrb
-*.idx
-*.ilg
-*.ind
-*.run.xml
-*.auxlock
+# ---- Python ----
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
 
-# Ignorar archivos y carpetas de construcción
-/build/
+# ---- R ----
+.Rhistory
+.Rapp.history
+.RData
+.Renviron
+.Rproj.user/
+.Ruserdata
 
-# Configs y caches de herramientas
-.latexmkrc
-
-# Archivos temporales y backups de editores / OS
-*~
-*.swp
-*.swo
-.#*
-*.bak
-*.tmp
-*.out.*
-.DS_Store
-Thumbs.db
-
-# IDE/editors
+# ---- Editores ----
 .vscode/
 .idea/
 
-# Binarios y objetos (para carpeta utils/codes)
-*.o
-*.exe
-*.out
-*.class
-*.so
-*.dll
-
-# Opcional: si quieres ignorar PDFs generados, descomenta la siguiente línea
-# *.pdf
+# ---- Sistema operativo ----
+Thumbs.db
+desktop.ini
+.DS_Store
