@@ -1,0 +1,10 @@
+medida,valor,ic_inferior,ic_superior,interpretacion
+d de Cohen (Res. vs Com.),3.3288,2.9008,3.7569,Efecto grande
+g de Hedges (Res. vs Com.),3.3162,,,Efecto grande
+eta cuadrado (ANOVA sector),0.8394,,,Efecto grande
+omega cuadrado (ANOVA sector),0.8378,,,Efecto grande
+f de Cohen (ANOVA sector),2.2859,,,Efecto grande
+Potencia observada (t de Welch),1.0,,,Potencia practicamente maxima
+Potencia observada (ANOVA),1.0,,,Potencia practicamente maxima
+"r minimo detectable (n = 300, potencia 0,80)",0.1611,,,"r global observado = 0.063, por debajo del umbral"
+r Residencial frente al umbral,0.5946,,,Supera el umbral: el diseno si tiene potencia para detectarlo

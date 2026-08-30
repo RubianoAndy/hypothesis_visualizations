@@ -19,7 +19,8 @@
 | **Unidad** | Unidad 2 · Pruebas de hipótesis y visualización interactiva |
 | **Programa** | Maestría en Inteligencia Artificial |
 | **Universidad** | Universidad de La Salle |
-| **Herramientas** | Python 3.14.7 (SciPy + statsmodels + Matplotlib + Seaborn + Plotly) y R 4.6.1 (ggplot2 + plotly) |
+| **Herramientas** | Python 3.14.7 (SciPy + statsmodels + Matplotlib + Seaborn + Plotly) y R 4.6.1 (ggplot2 + plotly + grid) |
+| **Figuras** | 9 en Python y 9 réplicas en R · 4 interactivas (2 por entorno) |
 | **Año** | 2026 |
 | **Estado** | Completado |
 
@@ -37,8 +38,10 @@ El proyecto desarrolla:
 - **Comparación de dos grupos** — prueba t de Student para muestras independientes con **corrección de Welch**, adoptada precisamente porque las varianzas resultaron heterogéneas.
 - **Comparación de tres grupos** — ANOVA de un factor seguido del post-hoc de **Tukey HSD**, que identifica cuáles pares de sectores difieren y no solo si alguno lo hace.
 - **Relación entre variables** — correlación de Pearson y regresión lineal por mínimos cuadrados (OLS) entre temperatura y consumo, evaluadas a nivel global y **desagregadas por sector**.
-- **Visualización avanzada** — cinco figuras con Matplotlib, Seaborn y Plotly, replicadas íntegramente con ggplot2 en R.
-- **Verificación cruzada Python ↔ R** — R recalcula las cinco pruebas de forma independiente; los estadísticos y los valores *p* coinciden **dígito a dígito**.
+- **Tamaño del efecto y potencia** — *d* de Cohen con IC del 95 %, *g* de Hedges, η², ω² y potencia observada, porque un valor *p* dice si el efecto es distinguible del azar pero no si importa. Incluye la correlación mínima detectable con potencia del 80 %.
+- **Robustez ante heterocedasticidad** — al rechazarse la homogeneidad de varianzas, todo el bloque de comparación de medias se **repite** con **ANOVA de Welch** y post-hoc de **Games-Howell**, implementados desde sus fórmulas. La decisión no cambia.
+- **Visualización avanzada** — **nueve** figuras con Matplotlib, Seaborn y Plotly, **dos interactivas** (dispersión por sector y *dashboard* de cuatro paneles), replicadas íntegramente con ggplot2 en R. Cada figura lleva impreso el estadístico y el valor *p* que representa.
+- **Verificación cruzada Python ↔ R** — R recalcula todo de forma independiente; los estadísticos, los valores *p*, los tamaños de efecto y los contrastes robustos coinciden **dígito a dígito**.
 
 ### El hallazgo central
 
@@ -49,7 +52,8 @@ El proyecto desarrolla:
 - Formular hipótesis estadísticas sobre el consumo energético y contrastarlas con la prueba adecuada a cada caso.
 - Verificar los supuestos de normalidad y homocedasticidad antes de aplicar pruebas paramétricas, y corregir el procedimiento cuando no se cumplen.
 - Aplicar correctamente `scipy.stats` y `statsmodels` en Python, y `t.test`, `aov` y `TukeyHSD` en R.
-- Representar los resultados de cada prueba con Matplotlib, Seaborn, Plotly y ggplot2, incluyendo una figura **interactiva**.
+- Reportar el **tamaño del efecto** y la **potencia** junto a cada valor *p*, y verificar la robustez de las conclusiones cuando un supuesto no se cumple.
+- Representar los resultados de cada prueba con Matplotlib, Seaborn, Plotly y ggplot2, incluyendo figuras **interactivas** y un **dashboard**.
 - Interpretar los hallazgos en términos de decisión y no solo de significancia estadística.
 - Validar el análisis mediante una implementación independiente en R sobre el mismo dataset.
 
@@ -71,7 +75,10 @@ El proyecto desarrolla:
 │       ├── anova_results.csv                     # Tabla ANOVA de un factor (statsmodels)
 │       ├── tukey_posthoc.csv                     # Comparaciones múltiples de Tukey (Python)
 │       ├── regression_results.csv                # Pearson global y por sector + OLS (Python)
-│       └── *_r.csv                               # Las mismas cinco tablas recalculadas en R
+│       ├── effect_sizes.csv                      # d de Cohen, g de Hedges, eta2, omega2, potencia
+│       ├── welch_anova.csv                       # ANOVA de Welch (sin homocedasticidad)
+│       ├── games_howell.csv                      # Post-hoc de Games-Howell con IC del 95 %
+│       └── *_r.csv                               # Las mismas siete tablas recalculadas en R
 ├── public/
 │   └── assets/
 │       └── images/
@@ -79,13 +86,13 @@ El proyecto desarrolla:
 │           ├── author/                           # Foto del autor
 │           └── figures/
 │               ├── python/
-│               │   └── hypothesis/               # 5 figuras PNG + el HTML interactivo de Plotly
+│               │   └── hypothesis/               # 9 figuras PNG + 2 HTML interactivos de Plotly
 │               └── r/
-│                   └── hypothesis/               # Las 5 réplicas en ggplot2 + el HTML de ggplotly
+│                   └── hypothesis/               # Las 9 réplicas en ggplot2 + 2 HTML de ggplotly
 └── utils/
     └── codes/
-        ├── hypothesis_testing.py                 # Dataset, cinco pruebas y cinco figuras (Python)
-        └── hypothesis_testing.R                  # Recálculo independiente y réplicas (R)
+        ├── hypothesis_testing.py                 # Dataset, pruebas, efectos, robustez y 9 figuras
+        └── hypothesis_testing.R                  # Recálculo independiente y 9 réplicas (R)
 ```
 
 ### Variables del dataset
@@ -122,7 +129,7 @@ El flujo es **secuencial**: Python genera los datos, ejecuta las cinco pruebas, 
 
 ### Fase 1 · Pruebas de hipótesis y figuras en Python
 
-[`hypothesis_testing.py`](utils/codes/hypothesis_testing.py) genera el dataset con semilla fija, aplica las cinco pruebas con `scipy.stats` y `statsmodels`, y produce las figuras con Matplotlib, Seaborn y Plotly.
+[`hypothesis_testing.py`](utils/codes/hypothesis_testing.py) genera el dataset con semilla fija, aplica las cinco pruebas con `scipy.stats` y `statsmodels`, calcula los tamaños de efecto y los contrastes robustos, y produce las nueve figuras con Matplotlib, Seaborn y Plotly.
 
 | Salida | Ubicación | Descripción |
 |---|---|---|
@@ -131,17 +138,19 @@ El flujo es **secuencial**: Python genera los datos, ejecuta las cinco pruebas, 
 | Prueba t | `data/processed/ttest_results.csv` | Medias, estadístico t de Welch, valor *p* y decisión |
 | ANOVA | `data/processed/anova_results.csv` | Suma de cuadrados, grados de libertad, F y `PR(>F)` |
 | Post-hoc | `data/processed/tukey_posthoc.csv` | Las tres comparaciones por pares con IC del 95 % |
-| Regresión | `data/processed/regression_results.csv` | Pearson global y por sector, $b_0$, $b_1$ y $R^2$ |
-| Figuras | `public/assets/images/figures/python/hypothesis/` | 5 PNG estáticos + el HTML interactivo de la Figura 5 |
+| Regresión | `data/processed/regression_results.csv` | Pearson global y por sector, $b_0$, $b_1$, $s_Y$ y $R^2$ |
+| Efectos | `data/processed/effect_sizes.csv` | *d* de Cohen con IC, *g* de Hedges, η², ω², potencia y $r_{mín}$ |
+| Robustez | `data/processed/welch_anova.csv` · `games_howell.csv` | ANOVA de Welch y post-hoc sin homocedasticidad |
+| Figuras | `public/assets/images/figures/python/hypothesis/` | 9 PNG estáticos + 2 HTML interactivos (Figuras 5 y 9) |
 
 ### Fase 2 · Recálculo y verificación en R
 
-[`hypothesis_testing.R`](utils/codes/hypothesis_testing.R) lee el CSV de la Fase 1 y **no reutiliza ningún valor de Python**: vuelve a ejecutar las cinco pruebas con las funciones nativas de R y redibuja las cinco figuras con ggplot2.
+[`hypothesis_testing.R`](utils/codes/hypothesis_testing.R) lee el CSV de la Fase 1 y **no reutiliza ningún valor de Python**: vuelve a ejecutar las cinco pruebas con las funciones nativas de R, recalcula los tamaños de efecto y los contrastes robustos, y redibuja las nueve figuras con ggplot2.
 
 | Salida | Ubicación | Descripción |
 |---|---|---|
-| Tablas | `data/processed/*_r.csv` | Las mismas cinco tablas, recalculadas de forma independiente |
-| Figuras | `public/assets/images/figures/r/hypothesis/` | Las 5 réplicas en ggplot2 |
+| Tablas | `data/processed/*_r.csv` | Las mismas siete tablas, recalculadas de forma independiente |
+| Figuras | `public/assets/images/figures/r/hypothesis/` | Las 9 réplicas en ggplot2 + 2 HTML de `ggplotly` |
 | Verificación | Consola | Estadísticos y valores *p* — deben coincidir con los CSV de Python |
 
 **Características clave:**
@@ -149,7 +158,7 @@ El flujo es **secuencial**: Python genera los datos, ejecuta las cinco pruebas, 
 - **Reproducibilidad:** semilla fija (`default_rng(42)`); cualquier ejecución produce los mismos 300 registros, las mismas tablas y las mismas figuras.
 - **Rutas:** ambos scripts usan rutas **relativas a la raíz del proyecto**, así que deben ejecutarse desde ahí; Python crea las carpetas de salida si no existen (`os.makedirs`), igual que R con `dir.create(recursive = TRUE)`.
 - **Verificación cruzada:** Shapiro-Wilk, la t de Welch, la tabla ANOVA, Tukey y la regresión coinciden **dígito a dígito** entre Python y R. La única diferencia esperada es la prueba de varianzas: Python usa **Levene** (basada en desviaciones absolutas respecto a la media) y R usa **Bartlett** (basada en el cociente de verosimilitudes), dos estadísticos distintos que aquí conducen a la misma decisión.
-- **Interactividad:** la Figura 5 de Python se exporta como HTML de Plotly con zoom, filtrado por leyenda y *hover* que revela el identificador del cliente y su región. R ofrece la versión equivalente vía `plotly::ggplotly` cuando el paquete está instalado.
+- **Interactividad:** las Figuras 5 y 9 de Python se exportan como HTML de Plotly con zoom, filtrado por leyenda y *hover* que revela el identificador del cliente y su región. Aislar un sector desde la leyenda **equivale a ejecutar el análisis condicionado**, que es la operación que separa la conclusión correcta de la equivocada. R ofrece las versiones equivalentes vía `plotly::ggplotly` cuando el paquete está instalado.
 
 ---
 
@@ -174,9 +183,9 @@ El flujo es **secuencial**: Python genera los datos, ejecuta las cinco pruebas, 
 
 ### R
 
-- **R 4.x** (probado en **4.6.1**) — requiere **`ggplot2`** (probado en 4.0.3) para las cinco réplicas.
+- **R 4.x** (probado en **4.6.1**) — requiere **`ggplot2`** (probado en 4.0.3) para las nueve réplicas. El *dashboard* estático se compone con `grid`, que viene con R y no exige `patchwork` ni `gridExtra`.
 - `plotly` y `htmlwidgets` para la versión interactiva vía `ggplotly` — recomendados, ya que la actividad pide visualización interactiva también en RStudio.
-- Las pruebas estadísticas usan funciones de R base (`stats`): `shapiro.test`, `bartlett.test`, `t.test`, `aov`, `TukeyHSD`, `cor.test` y `lm` — sin dependencias adicionales.
+- Las pruebas estadísticas usan funciones de R base (`stats`): `shapiro.test`, `bartlett.test`, `t.test`, `aov`, `TukeyHSD`, `cor.test`, `lm` y `oneway.test` — sin dependencias adicionales. Games-Howell se implementa sobre `ptukey` y `qtukey`, y la potencia sobre las distribuciones no centrales `pt` y `pf`.
 - Editor: RStudio Desktop o VS Code con la extensión **R** (REditorSupport) + `languageserver`.
 
 ---
@@ -194,7 +203,7 @@ pip install -r requirements.txt
 # 2. Fase 1: dataset, pruebas de hipótesis y figuras de Python
 python utils/codes/hypothesis_testing.py
 
-# 3. Fase 2: réplicas en ggplot2 y verificación cruzada
+# Dataset, pruebas, efectos, robustez y 9 figuras
 Rscript utils/codes/hypothesis_testing.R
 ```
 
@@ -221,12 +230,32 @@ Ambos scripts terminan con código de salida `0`. El de R guarda la figura inter
 | | |
 |---|---|
 | ![Histograma con curva normal](public/assets/images/figures/python/hypothesis/fig1_histograma_normalidad.png) | ![Boxplot por sector](public/assets/images/figures/python/hypothesis/fig2_boxplot_sectores.png) |
-| **Figura 1 · Normalidad (Matplotlib)** — histograma del sector Residencial con la curva normal teórica superpuesta: la coincidencia visual respalda el p = 0,763 de Shapiro-Wilk | **Figura 2 · Boxplot por sector (Seaborn)** — cajas sin traslape y amplitudes crecientes; sostiene a la vez el rechazo del ANOVA y el de la homogeneidad de varianzas |
+| **Figura 1 · Normalidad (Matplotlib)** — histograma del sector Residencial con la curva normal teórica superpuesta: la coincidencia visual respalda el p = 0,763 de Shapiro-Wilk | **Figura 2 · Violín y caja por sector (Seaborn)** — distribuciones sin traslape y amplitudes crecientes, con el ANOVA y su η² rotulados sobre la figura |
 
 | | |
 |---|---|
 | ![Medias con IC 95%](public/assets/images/figures/python/hypothesis/fig3_medias_ic95.png) | ![Regresión temperatura-consumo](public/assets/images/figures/python/hypothesis/fig4_regresion_temperatura.png) |
-| **Figura 3 · Medias con IC del 95 % (Matplotlib)** — los intervalos no se solapan, la lectura gráfica del resultado de Tukey | **Figura 4 · Regresión (Seaborn)** — dispersión temperatura vs. consumo con la recta OLS y su banda de confianza |
+| **Figura 3 · Medias con IC del 95 % (Matplotlib)** — las letras (a), (b) y (c) codifican Tukey: letras distintas significan diferencia significativa | **Figura 4 · Regresión (Seaborn)** — dispersión temperatura vs. consumo con la recta OLS, su banda de confianza y el contraste de Pearson rotulado |
+
+### Diagnóstico, post-hoc y atenuación (Python · Matplotlib y Seaborn)
+
+<div align="center">
+    <img src="public/assets/images/figures/python/hypothesis/fig6_qqplots_normalidad.png" width="900" alt="Q-Q plots por sector">
+</div>
+
+**Figura 6 · Q-Q plots por sector (Matplotlib)** — el histograma resuelve el centro de la distribución pero pierde resolución en las colas, que es donde una desviación de la normalidad invalidaría las pruebas paramétricas. Los tres sectores se alinean sobre la diagonal en todo el recorrido.
+
+<div align="center">
+    <img src="public/assets/images/figures/python/hypothesis/fig7_tukey_forest.png" width="820" alt="Forest plot de Tukey frente a Games-Howell">
+</div>
+
+**Figura 7 · Tukey HSD frente a Games-Howell (Matplotlib)** — convierte una limitación en una comprobación. Las diferencias puntuales son idénticas; lo que cambia es la precisión: Games-Howell **estrecha** el intervalo entre los dos sectores de menor varianza y lo **ensancha** en los que involucran a Industrial. Ningún intervalo cruza el cero, así que la decisión no depende del supuesto de homocedasticidad.
+
+<div align="center">
+    <img src="public/assets/images/figures/python/hypothesis/fig8_atenuacion.png" width="900" alt="Descomposición de la atenuación por agregación">
+</div>
+
+**Figura 8 · Descomposición de la atenuación (Seaborn)** — los tres paneles se leen como una cadena causal sobre la identidad *r = b₁·s_T/s_Y*: la pendiente global (3,42) se mantiene cerca del valor de diseño, la desviación del consumo se multiplica por casi ocho al mezclar sectores (40,6 → 317,5 kWh), y la correlación se desploma en la misma proporción.
 
 ### Figura interactiva (Python · Plotly)
 
@@ -238,9 +267,17 @@ Ambos scripts terminan con código de salida `0`. El de R guarda la figura inter
 
 La versión interactiva se exporta como [`fig5_interactivo_plotly.html`](public/assets/images/figures/python/hypothesis/fig5_interactivo_plotly.html): al abrirla en el navegador permite hacer zoom, aislar sectores desde la leyenda y ver el identificador y la región de cada cliente al pasar el ratón. El PNG de arriba es la captura estática que genera `kaleido` para insertarla en el informe.
 
+### Dashboard interactivo (Python · Plotly)
+
+<div align="center">
+    <img src="public/assets/images/figures/python/hypothesis/fig9_dashboard_plotly.png" width="900" alt="Dashboard de cuatro paneles en Plotly">
+</div>
+
+**Figura 9 · Dashboard del protocolo de contraste (Plotly)** — reúne las cuatro decisiones en una sola vista, porque la contradicción que articula el laboratorio solo aparece al poner un resultado junto a otro: el panel **A** separa los sectores sin traslape, el **B** muestra que ese mismo conjunto declara no significativa la correlación global mientras la del Residencial es la mayor de las cuatro, el **C** exhibe la recta agregada atravesando tres franjas que no describe, y el **D** identifica al responsable, la desviación del consumo. Versión interactiva en [`fig9_dashboard_plotly.html`](public/assets/images/figures/python/hypothesis/fig9_dashboard_plotly.html).
+
 ### Réplica en R (ggplot2)
 
-Las cinco figuras tienen su equivalente en ggplot2, construidas sobre estadísticos recalculados de forma independiente.
+Las nueve figuras tienen su equivalente en ggplot2, construidas sobre estadísticos recalculados de forma independiente.
 
 | | |
 |---|---|
@@ -254,6 +291,23 @@ Las cinco figuras tienen su equivalente en ggplot2, construidas sobre estadísti
 </div>
 
 **Figura 5R · Dispersión por sector (ggplot2)** — la réplica de la Figura 5, con una recta de regresión por sector y las mismas tres pendientes paralelas. El script la convierte además en interactiva con `ggplotly`, guardándola en [`fig5_interactivo_r.html`](public/assets/images/figures/r/hypothesis/fig5_interactivo_r.html): la contraparte en RStudio de la figura de Plotly, con el mismo zoom, filtrado por leyenda y *hover*.
+
+| | |
+|---|---|
+| ![Q-Q en R](public/assets/images/figures/r/hypothesis/fig6_qqplots_normalidad.png) | ![Forest en R](public/assets/images/figures/r/hypothesis/fig7_tukey_forest.png) |
+| **Figura 6R** — `stat_qq` + `stat_qq_line` con `facet_wrap` por sector | **Figura 7R** — `geom_pointrange` con `position_dodge`, Tukey frente a Games-Howell |
+
+<div align="center">
+    <img src="public/assets/images/figures/r/hypothesis/fig8_atenuacion.png" width="900" alt="Atenuación en ggplot2">
+</div>
+
+**Figura 8R · Descomposición de la atenuación (ggplot2)** — `geom_col` + `facet_wrap(scales = "free_y")` sobre los tres términos de la identidad *r = b₁·s_T/s_Y*.
+
+<div align="center">
+    <img src="public/assets/images/figures/r/hypothesis/fig9_dashboard.png" width="900" alt="Dashboard en ggplot2">
+</div>
+
+**Figura 9R · Dashboard del protocolo (ggplot2)** — la retícula de cuatro paneles se compone con `grid`, que viene con R base y evita depender de `patchwork`. La versión interactiva se genera con `plotly::subplot` sobre los mismos objetos y se guarda en [`fig9_dashboard_r.html`](public/assets/images/figures/r/hypothesis/fig9_dashboard_r.html).
 
 ---
 
@@ -297,6 +351,37 @@ El consumo medio comercial **más que duplica** al residencial. La magnitud del 
 
 El sector explica el **83,9 %** de la variabilidad del consumo ($SC_{sector} / SC_{total}$). Tukey confirma que **las tres** comparaciones por pares son significativas: no hay dos sectores que puedan tratarse como equivalentes.
 
+### 3-bis. Tamaño del efecto, potencia y robustez
+
+Un valor *p* dice si el efecto es distinguible del azar; no dice si importa. Con n = 100 por grupo casi cualquier diferencia alcanza la significancia, así que cada contraste va acompañado de su magnitud.
+
+| Medida | Valor | IC 95 % | Lectura |
+|---|---|---|---|
+| *d* de Cohen (Res. vs. Com.) | **3,329** | [2,901 ; 3,757] | Efecto muy grande |
+| *g* de Hedges | 3,316 | — | La corrección apenas altera la cifra |
+| η² (sector) | 0,839 | — | Varianza explicada |
+| ω² (sector) | 0,838 | — | Coincide con η²: no está inflada |
+| *f* de Cohen (sector) | 2,286 | — | Muy por encima de 0,40 |
+| Potencia (*t* y ANOVA) | > 0,999 | — | Máxima |
+| $r_{mín}$ detectable (n = 300, potencia 0,80) | **0,161** | — | El *r* global (0,063) **queda por debajo** |
+
+La última fila es la que cierra el argumento del laboratorio: la correlación global no es no-significativa por falta de muestra, sino porque el coeficiente estandarizado se volvió realmente pequeño. El del sector Residencial (0,595) supera el umbral con holgura.
+
+Como Levene y Bartlett rechazan la homocedasticidad —supuesto que el ANOVA clásico y Tukey asumen—, el bloque completo se repite sin ese supuesto:
+
+| Procedimiento | *F* / diferencia | gl | *p* |
+|---|---|---|---|
+| ANOVA clásico | 775,99 | 2 ; 297 | < 0,001 |
+| **ANOVA de Welch** | **830,22** | 2 ; 156,1 | < 0,001 |
+| Tukey: Ind. − Res. | +700,70 | 297 | < 0,001 |
+| **Games-Howell**: Ind. − Res. | +700,70 | 107,5 | < 0,001 |
+| Tukey: Com. − Res. | +244,33 | 297 | < 0,001 |
+| **Games-Howell**: Com. − Res. | +244,33 | 133,6 | < 0,001 |
+| Tukey: Ind. − Com. | +456,37 | 297 | < 0,001 |
+| **Games-Howell**: Ind. − Com. | +456,37 | 143,8 | < 0,001 |
+
+**La decisión no cambia.** Lo que cambia es la precisión de cada intervalo (ver Figura 7). Ni el ANOVA de Welch ni Games-Howell existen en `scipy` o `statsmodels`, así que se implementaron desde sus fórmulas —y desde cero otra vez en R— lo que hace la verificación cruzada mucho más exigente que comparar dos bibliotecas maduras del mismo algoritmo.
+
 ### 4. Correlación y regresión temperatura ↔ consumo
 
 | Ámbito | r de Pearson | *p* | Decisión |
@@ -321,6 +406,11 @@ La detección es **visual antes que numérica**: en la Figura 4 la nube global p
 | ANOVA | F = 775,9887 | F = 775,9887 | ✅ dígito a dígito |
 | Tukey HSD | +456,371 / −244,327 / −700,698 | idénticos | ✅ dígito a dígito |
 | Pearson + regresión | r = 0,063; $b_1$ = 3,42 | r = 0,063; $b_1$ = 3,42 | ✅ dígito a dígito |
+| *d* de Cohen | 3,3288 [2,9008 ; 3,7569] | 3,3288 [2,9008 ; 3,7569] | ✅ dígito a dígito |
+| η² / ω² | 0,8394 / 0,8378 | 0,8394 / 0,8378 | ✅ dígito a dígito |
+| Potencia (*t* / ANOVA) | 1,0000 / 1,0000 | 1,0000 / 1,0000 | ✅ dígito a dígito |
+| ANOVA de Welch | F = 830,2239; gl₂ = 156,12 | F = 830,2239; gl₂ = 156,12 | ✅ dígito a dígito |
+| Games-Howell | +244,33 / +700,70 / +456,37 | idénticos | ✅ dígito a dígito |
 | Varianzas | Levene = 60,43 | Bartlett = 199,39 | ⚠️ pruebas distintas, misma decisión |
 
 ### Implicaciones para la decisión
@@ -333,7 +423,7 @@ La detección es **visual antes que numérica**: en la Figura 4 la nube global p
 
 ## 🔑 Palabras Clave
 
-`Pruebas de Hipótesis` · `ANOVA` · `Tukey HSD` · `Prueba t de Welch` · `Shapiro-Wilk` · `Correlación de Pearson` · `Regresión OLS` · `SciPy` · `statsmodels` · `Plotly` · `Seaborn` · `ggplot2` · `Visualización Interactiva` · `Ciencia de Datos`
+`Pruebas de Hipótesis` · `ANOVA` · `ANOVA de Welch` · `Tukey HSD` · `Games-Howell` · `Prueba t de Welch` · `Shapiro-Wilk` · `Tamaño del Efecto` · `d de Cohen` · `Potencia Estadística` · `Correlación de Pearson` · `Regresión OLS` · `SciPy` · `statsmodels` · `Matplotlib` · `Seaborn` · `Plotly` · `ggplot2` · `Visualización Interactiva` · `Dashboard` · `Ciencia de Datos`
 
 ---
 

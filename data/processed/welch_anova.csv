@@ -1,0 +1,2 @@
+prueba,estadistico_f,gl_numerador,gl_denominador,p_valor,decision
+ANOVA de Welch (sin homocedasticidad),830.2239,2,156.12,6.387e-84,Se rechaza H0

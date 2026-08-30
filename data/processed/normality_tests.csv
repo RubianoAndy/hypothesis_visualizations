@@ -1,5 +1,5 @@
 prueba,grupo,estadistico,p_valor,decision
+Shapiro-Wilk,Residencial,0.9912,0.7628,No se rechaza H0 (normal)
 Shapiro-Wilk,Comercial,0.9868,0.4246,No se rechaza H0 (normal)
 Shapiro-Wilk,Industrial,0.9933,0.9069,No se rechaza H0 (normal)
-Shapiro-Wilk,Residencial,0.9912,0.7628,No se rechaza H0 (normal)
 Levene,Los 3 sectores,60.4273,0.0,Varianzas distintas

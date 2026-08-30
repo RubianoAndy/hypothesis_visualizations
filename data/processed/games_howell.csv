@@ -1,0 +1,4 @@
+comparacion,diferencia,ic_inferior,ic_superior,q,gl_welch,p_ajustado,decision
+Comercial - Residencial,244.327,219.725,268.929,33.288,133.57,0.0,Se rechaza H0
+Industrial - Residencial,700.698,653.301,748.095,49.688,107.53,0.0,Se rechaza H0
+Industrial - Comercial,456.371,404.889,507.853,29.69,143.84,4.607e-14,Se rechaza H0

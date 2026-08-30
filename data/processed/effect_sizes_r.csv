@@ -1,0 +1,9 @@
+"medida","valor","ic_inferior","ic_superior"
+"d de Cohen (Res. vs Com.)",3.3288,2.9008,3.7569
+"g de Hedges (Res. vs Com.)",3.3162,NA,NA
+"eta cuadrado (ANOVA sector)",0.8394,NA,NA
+"omega cuadrado (ANOVA sector)",0.8378,NA,NA
+"f de Cohen (ANOVA sector)",2.2859,NA,NA
+"Potencia observada (t de Welch)",1,NA,NA
+"Potencia observada (ANOVA)",1,NA,NA
+"r minimo detectable (n = 300, potencia 0,80)",0.1611,NA,NA
