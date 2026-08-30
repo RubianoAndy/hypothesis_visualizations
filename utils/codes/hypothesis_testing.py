@@ -518,7 +518,7 @@ def plot_histogram_normality(df):
     ax.plot(x, stats.norm.pdf(x, data.mean(), data.std()), "r-", lw=2,
             label="Normal teórica")
 
-    # ax.set_title("Figura 1. Verificación de normalidad — Sector Residencial (Shapiro-Wilk)")
+    ax.set_title("Verificación de normalidad — Sector Residencial (Shapiro-Wilk)")
     ax.set_xlabel("Consumo (kWh/mes)")
     ax.set_ylabel("Densidad")
     ax.legend(loc="upper right")
@@ -527,7 +527,7 @@ def plot_histogram_normality(df):
             f"No se rechaza $H_0$ (α = 0,05)",
             transform=ax.transAxes, va="top", ha="left", fontsize=9, bbox=STAT_BOX)
     fig.tight_layout()
-    fig.savefig(f"{FIGURES_DIR}/fig1_histograma_normalidad.png", dpi=150)
+    fig.savefig(f"{FIGURES_DIR}/histograma_normalidad.png", dpi=150)
     plt.close(fig)
 
 
@@ -548,7 +548,7 @@ def plot_boxplot_anova(df, anova_table, eta_sq):
     sns.stripplot(data=df, x="sector", y="consumo_kwh", order=SECTOR_ORDER,
                   color="gray", size=2.5, alpha=0.4, ax=ax)
 
-    # ax.set_title("Figura 2. Consumo de energía por sector (ANOVA de un factor)")
+    ax.set_title("Consumo de energía por sector (ANOVA de un factor)")
     ax.set_xlabel("Sector")
     ax.set_ylabel("Consumo (kWh/mes)")
     ax.text(0.02, 0.97,
@@ -556,7 +556,7 @@ def plot_boxplot_anova(df, anova_table, eta_sq):
             f"$\\eta^2$ = {dec(eta_sq, 3)} (efecto grande)",
             transform=ax.transAxes, va="top", ha="left", fontsize=9, bbox=STAT_BOX)
     fig.tight_layout()
-    fig.savefig(f"{FIGURES_DIR}/fig2_boxplot_sectores.png", dpi=150)
+    fig.savefig(f"{FIGURES_DIR}/boxplot_sectores.png", dpi=150)
     plt.close(fig)
 
 
@@ -603,14 +603,14 @@ def plot_means_ci(df, tukey_df):
                 fontsize=10, fontweight="bold")
 
     ax.set_ylim(0, max(m + e for m, e in zip(means, errors)) * 1.25)
-    # ax.set_title("Figura 3. Consumo medio por sector con IC del 95 % (prueba t / ANOVA)")
+    ax.set_title("Consumo medio por sector con IC del 95 % (prueba t / ANOVA)")
     ax.set_xlabel("Sector")
     ax.set_ylabel("Consumo medio (kWh/mes)")
     ax.text(0.02, 0.97,
             "Letras distintas indican\ndiferencia significativa\n(Tukey HSD, α = 0,05)",
             transform=ax.transAxes, va="top", ha="left", fontsize=9, bbox=STAT_BOX)
     fig.tight_layout()
-    fig.savefig(f"{FIGURES_DIR}/fig3_medias_ic95.png", dpi=150)
+    fig.savefig(f"{FIGURES_DIR}/medias_ic95.png", dpi=150)
     plt.close(fig)
 
 
@@ -623,7 +623,7 @@ def plot_regression_seaborn(df, model):
         data=df, x="temperatura_c", y="consumo_kwh",
         scatter_kws={"alpha": 0.4, "s": 18}, line_kws={"color": "red"}, ax=ax,
     )
-    # ax.set_title("Figura 4. Relación temperatura vs. consumo (Pearson y regresión OLS)")
+    ax.set_title("Relación temperatura vs. consumo (Pearson y regresión OLS)")
     ax.set_xlabel("Temperatura promedio (°C)")
     ax.set_ylabel("Consumo (kWh/mes)")
     b0 = model.params["const"]
@@ -634,7 +634,7 @@ def plot_regression_seaborn(df, model):
             f"$R^2$ = {dec(model.rsquared, 4)} — No se rechaza $H_0$",
             transform=ax.transAxes, va="top", ha="left", fontsize=9, bbox=STAT_BOX)
     fig.tight_layout()
-    fig.savefig(f"{FIGURES_DIR}/fig4_regresion_temperatura.png", dpi=150)
+    fig.savefig(f"{FIGURES_DIR}/regresion_temperatura.png", dpi=150)
     plt.close(fig)
 
 
@@ -660,12 +660,12 @@ def plot_interactive_plotly(df):
     fig.update_traces(marker=dict(size=7, line=dict(width=0.5, color="white")))
     fig.update_layout(template="plotly_white", legend_title_text="Sector",
                       title_font_size=15)
-    fig.write_html(f"{FIGURES_DIR}/fig5_interactivo_plotly.html")
+    fig.write_html(f"{FIGURES_DIR}/dispersion_interactiva_plotly.html")
 
     # El PNG estatico requiere Chrome instalado (lo usa kaleido).
     # Si no esta disponible, el HTML interactivo igual queda generado.
     try:
-        fig.write_image(f"{FIGURES_DIR}/fig5_interactivo_plotly.png", width=900, height=550, scale=2)
+        fig.write_image(f"{FIGURES_DIR}/dispersion_interactiva_plotly.png", width=900, height=550, scale=2)
     except Exception:
         print("[AVISO] No se pudo exportar el PNG de Plotly (falta Chrome).")
         print("        Ejecute 'plotly_get_chrome' o tome una captura del HTML.")
@@ -688,13 +688,12 @@ def plot_qq_by_sector(df):
                               markeredgecolor="white", markeredgewidth=0.4,
                               linestyle="none")
         ax.get_lines()[1].set(color="red", linewidth=1.6)
-        ax.set_title(f"{sector}\nW = {dec(stat, 4)}; {format_p(p_value)}", fontsize=10)
         ax.set_xlabel("Cuantiles teóricos")
         ax.set_ylabel("Cuantiles observados")
 
-    # fig.suptitle("Figura 6. Diagnóstico gráfico de normalidad por sector (Q-Q plots)", fontsize=12, fontweight="bold")
+    fig.suptitle("Diagnóstico gráfico de normalidad por sector (Q-Q plots)", fontsize=12, fontweight="bold")
     fig.tight_layout()
-    fig.savefig(f"{FIGURES_DIR}/fig6_qqplots_normalidad.png", dpi=150)
+    fig.savefig(f"{FIGURES_DIR}/qqplots_normalidad.png", dpi=150)
     plt.close(fig)
 
 
@@ -742,7 +741,7 @@ def plot_tukey_forest(tukey_df, gh_df):
     ax.set_yticklabels(labels)
     ax.set_ylim(-0.6, len(labels) - 0.4)
     ax.set_xlabel("Diferencia de medias (kWh/mes) con IC del 95 %")
-    # ax.set_title("Figura 7. Comparaciones múltiples: Tukey HSD frente a Games-Howell")
+    ax.set_title("Comparaciones múltiples: Tukey HSD frente a Games-Howell")
     # Las dos diferencias negativas ocupan la mitad izquierda y la positiva la
     # esquina inferior derecha, asi que leyenda y nota van a las zonas libres.
     ax.legend(loc="upper right", fontsize=9, framealpha=0.95)
@@ -751,7 +750,7 @@ def plot_tukey_forest(tukey_df, gh_df):
             "difieren entre sí y ambos post-hoc coinciden",
             transform=ax.transAxes, va="bottom", ha="left", fontsize=9, bbox=STAT_BOX)
     fig.tight_layout()
-    fig.savefig(f"{FIGURES_DIR}/fig7_tukey_forest.png", dpi=150)
+    fig.savefig(f"{FIGURES_DIR}/tukey_forest_forest.png", dpi=150)
     plt.close(fig)
 
 
@@ -787,13 +786,12 @@ def plot_attenuation(regression_df):
             ax.bar_label(container, fmt=lambda v: dec(v), fontsize=9, padding=2)
         ax.set_xlabel("")
         ax.set_ylabel(ylabel)
-        ax.set_title(note, fontsize=10)
         ax.tick_params(axis="x", rotation=18)
         ax.margins(y=0.20)
 
-    # fig.suptitle("Figura 8. Descomposición de la atenuación por agregación: " "$r = b_1\\,s_T/s_Y$", fontsize=12, fontweight="bold")
+    fig.suptitle("Descomposición de la atenuación por agregación: " "$r = b_1\\,s_T/s_Y$", fontsize=12, fontweight="bold")
     fig.tight_layout()
-    fig.savefig(f"{FIGURES_DIR}/fig8_atenuacion.png", dpi=150)
+    fig.savefig(f"{FIGURES_DIR}/atenuacion.png", dpi=150)
     plt.close(fig)
 
 
@@ -887,9 +885,9 @@ def plot_dashboard_plotly(df, regression_df, anova_table):
     for annotation in fig.layout.annotations:
         annotation.font.size = 11
 
-    fig.write_html(f"{FIGURES_DIR}/fig9_dashboard_plotly.html")
+    fig.write_html(f"{FIGURES_DIR}/dashboard_plotly.html")
     try:
-        fig.write_image(f"{FIGURES_DIR}/fig9_dashboard_plotly.png",
+        fig.write_image(f"{FIGURES_DIR}/dashboard_plotly.png",
                         width=1150, height=760, scale=2)
     except Exception:
         print("[AVISO] No se pudo exportar el PNG del dashboard (falta Chrome).")

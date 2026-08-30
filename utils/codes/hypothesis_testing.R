@@ -348,10 +348,10 @@ p1 <- ggplot(data.frame(consumo_kwh = residential), aes(x = consumo_kwh)) +
            label = paste0("Shapiro-Wilk: W = ", dec(shapiro_res$statistic, 4),
                           "\n", format_p(shapiro_res$p.value),
                           "\nNo se rechaza H0")) +
-  labs(title = "Figura 1R. Verificación de normalidad — Sector Residencial (shapiro.test)",
+  labs(title = "Verificación de normalidad — Sector Residencial (shapiro.test)",
        x = "Consumo (kWh/mes)", y = "Densidad") +
   theme_informe
-ggsave(file.path(figures_dir, "fig1_histograma_normalidad.png"), p1,
+ggsave(file.path(figures_dir, "histograma_normalidad.png"), p1,
        width = 8, height = 5, dpi = 150)
 
 # --- Figura 2R: violin + boxplot del consumo por sector (ANOVA) --------------
@@ -366,10 +366,10 @@ p2 <- ggplot(df, aes(x = sector, y = consumo_kwh, fill = sector)) +
            label = paste0("ANOVA: F(2, 297) = ", dec(f_anova),
                           "\n", format_p(p_anova),
                           "\neta^2 = ", dec(eta_sq, 3), " (efecto grande)")) +
-  labs(title = "Figura 2R. Consumo de energía por sector (ANOVA de un factor)",
+  labs(title = "Consumo de energía por sector (ANOVA de un factor)",
        x = "Sector", y = "Consumo (kWh/mes)") +
   theme_informe + theme(legend.position = "none")
-ggsave(file.path(figures_dir, "fig2_boxplot_sectores.png"), p2,
+ggsave(file.path(figures_dir, "boxplot_sectores.png"), p2,
        width = 8, height = 5, dpi = 150)
 
 # --- Figura 3R: medias con IC del 95 % y letras de Tukey ---------------------
@@ -416,10 +416,10 @@ p3 <- ggplot(ci_df, aes(x = sector, y = media, fill = sector)) +
   scale_y_continuous(expand = expansion(mult = c(0, 0.16))) +
   annotate("label", x = -Inf, y = Inf, hjust = -0.05, vjust = 1.15, size = 3.1,
            label = "Letras distintas indican\ndiferencia significativa\n(Tukey HSD, alfa = 0,05)") +
-  labs(title = "Figura 3R. Consumo medio por sector con IC del 95 % (t.test / aov)",
+  labs(title = "Consumo medio por sector con IC del 95 % (t.test / aov)",
        x = "Sector", y = "Consumo medio (kWh/mes)") +
   theme_informe + theme(legend.position = "none")
-ggsave(file.path(figures_dir, "fig3_medias_ic95.png"), p3,
+ggsave(file.path(figures_dir, "medias_ic95.png"), p3,
        width = 8, height = 5, dpi = 150)
 
 # --- Figura 4R: dispersion global + recta de regresion (Pearson / lm) --------
@@ -433,10 +433,10 @@ p4 <- ggplot(df, aes(x = temperatura_c, y = consumo_kwh)) +
                           dec(coef(linear_model)[2]), "·T",
                           "\nR^2 = ", dec(summary(linear_model)$r.squared, 4),
                           " — No se rechaza H0")) +
-  labs(title = "Figura 4R. Relación temperatura vs. consumo (cor.test y lm)",
+  labs(title = "Relación temperatura vs. consumo (cor.test y lm)",
        x = "Temperatura promedio (°C)", y = "Consumo (kWh/mes)") +
   theme_informe
-ggsave(file.path(figures_dir, "fig4_regresion_temperatura.png"), p4,
+ggsave(file.path(figures_dir, "regresion_temperatura.png"), p4,
        width = 8, height = 5, dpi = 150)
 
 # --- Figura 5R: dispersion por sector con una recta por grupo ----------------
@@ -444,11 +444,11 @@ p5 <- ggplot(df, aes(x = temperatura_c, y = consumo_kwh, color = sector)) +
   geom_point(alpha = 0.55, size = 1.5) +
   geom_smooth(method = "lm", formula = y ~ x, se = FALSE, linewidth = 1) +
   scale_color_manual(values = sector_colors) +
-  labs(title = "Figura 5R. Consumo vs. temperatura por sector (regresión por grupo)",
+  labs(title = "Consumo vs. temperatura por sector (regresión por grupo)",
        x = "Temperatura promedio (°C)", y = "Consumo (kWh/mes)",
        color = "Sector") +
   theme_informe
-ggsave(file.path(figures_dir, "fig5_dispersion_sectores.png"), p5,
+ggsave(file.path(figures_dir, "dispersion_dispersion_sectores.png"), p5,
        width = 8, height = 5, dpi = 150)
 
 # --- Figura 6R: Q-Q plots por sector -----------------------------------------
@@ -466,10 +466,10 @@ p6 <- ggplot(qq_df, aes(sample = consumo_kwh, color = sector)) +
   stat_qq_line(color = "red", linewidth = 0.7) +
   facet_wrap(~panel, scales = "free_y") +
   scale_color_manual(values = sector_colors) +
-  labs(title = "Figura 6R. Diagnóstico gráfico de normalidad por sector (Q-Q plots)",
+  labs(title = "Diagnóstico gráfico de normalidad por sector (Q-Q plots)",
        x = "Cuantiles teóricos", y = "Cuantiles observados") +
   theme_informe + theme(legend.position = "none")
-ggsave(file.path(figures_dir, "fig6_qqplots_normalidad.png"), p6,
+ggsave(file.path(figures_dir, "qqplots_normalidad.png"), p6,
        width = 10, height = 4.2, dpi = 150)
 
 # --- Figura 7R: forest plot de Tukey frente a Games-Howell -------------------
@@ -510,12 +510,12 @@ p7 <- ggplot(forest_df, aes(x = diferencia, y = comparacion, color = metodo)) +
                   position = position_dodge(width = 0.55), linewidth = 0.7) +
   scale_color_manual(values = c("Tukey HSD" = "#1F4E79",
                                 "Games-Howell" = "#C0504D")) +
-  labs(title = "Figura 7R. Comparaciones múltiples: Tukey HSD frente a Games-Howell",
+  labs(title = "Comparaciones múltiples: Tukey HSD frente a Games-Howell",
        subtitle = "Ningún intervalo cruza el cero: los tres sectores difieren y ambos post-hoc coinciden",
        x = "Diferencia de medias (kWh/mes) con IC del 95 %", y = NULL,
        color = "Método", shape = "Método") +
   theme_informe + theme(legend.position = "bottom")
-ggsave(file.path(figures_dir, "fig7_tukey_forest.png"), p7,
+ggsave(file.path(figures_dir, "tukey_forest.png"), p7,
        width = 8.5, height = 4.6, dpi = 150)
 
 # --- Figura 8R: descomposicion de la atenuacion por agregacion ---------------
@@ -544,12 +544,12 @@ p8 <- ggplot(atenuacion, aes(x = ambito, y = valor, fill = ambito)) +
   facet_wrap(~panel, scales = "free_y") +
   scale_fill_manual(values = scope_colors) +
   scale_y_continuous(expand = expansion(mult = c(0, 0.18))) +
-  labs(title = "Figura 8R. Descomposición de la atenuación por agregación: r = b1·s_T/s_Y",
+  labs(title = "Descomposición de la atenuación por agregación: r = b1·s_T/s_Y",
        subtitle = "La pendiente sobrevive a la agregación (línea = valor de diseño 4); la correlación no",
        x = NULL, y = NULL) +
   theme_informe +
   theme(legend.position = "none", axis.text.x = element_text(angle = 18, hjust = 1))
-ggsave(file.path(figures_dir, "fig8_atenuacion.png"), p8,
+ggsave(file.path(figures_dir, "atenuacion.png"), p8,
        width = 10.5, height = 4.4, dpi = 150)
 
 # --- Figura 9R: dashboard de cuatro paneles ---------------------------------
@@ -604,7 +604,7 @@ d_d <- ggplot(sd_df, aes(x = ambito, y = s_y, fill = ambito)) +
   theme_informe + theme(legend.position = "none")
 
 # grid (paquete base) compone la retícula 2x2 sin necesidad de patchwork
-png(file.path(figures_dir, "fig9_dashboard.png"), width = 1150, height = 790,
+png(file.path(figures_dir, "dashboard.png"), width = 1150, height = 790,
     res = 110)
 grid.newpage()
 pushViewport(viewport(layout = grid.layout(2, 2)))
@@ -633,23 +633,23 @@ save_widget <- function(widget, path) {
 if (requireNamespace("plotly", quietly = TRUE) &&
     requireNamespace("htmlwidgets", quietly = TRUE)) {
   # Figura 5R interactiva: la contraparte en RStudio de la Figura 5 de Plotly
-  fig5_int <- plotly::ggplotly(p5, tooltip = c("x", "y", "colour"))
-  estado5 <- save_widget(fig5_int, file.path(figures_dir, "fig5_interactivo_r.html"))
-  cat("[OK] Figura 5R interactiva -> fig5_interactivo_r.html -", estado5, "\n")
+  dispersion_int <- plotly::ggplotly(p5, tooltip = c("x", "y", "colour"))
+  estado5 <- save_widget(dispersion_int, file.path(figures_dir, "dispersion_interactivo_r.html"))
+  cat("[OK] Figura 5R interactiva -> dispersion_interactivo_r.html -", estado5, "\n")
 
   # Dashboard interactivo: los mismos cuatro paneles unidos con subplot
-  fig9_int <- plotly::subplot(
+  int <- plotly::subplot(
     plotly::ggplotly(d_a), plotly::ggplotly(d_b),
     plotly::ggplotly(d_c), plotly::ggplotly(d_d),
     nrows = 2, margin = 0.07, titleX = TRUE, titleY = TRUE
   )
-  fig9_int <- plotly::layout(
-    fig9_int, showlegend = FALSE,
+  int <- plotly::layout(
+    int, showlegend = FALSE,
     title = list(text = "Figura 9R. Dashboard interactivo del protocolo de contraste (ggplot2 + plotly)",
                  font = list(size = 14))
   )
-  estado9 <- save_widget(fig9_int, file.path(figures_dir, "fig9_dashboard_r.html"))
-  cat("[OK] Dashboard interactivo -> fig9_dashboard_r.html -", estado9, "\n")
+  estado9 <- save_widget(int, file.path(figures_dir, "dashboard_r.html"))
+  cat("[OK] Dashboard interactivo -> dashboard_r.html -", estado9, "\n")
 } else {
   cat("[AVISO] Paquete 'plotly' no instalado en R; solo se generaron los PNG.\n")
 }
