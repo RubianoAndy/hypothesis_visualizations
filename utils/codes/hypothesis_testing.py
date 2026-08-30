@@ -518,7 +518,7 @@ def plot_histogram_normality(df):
     ax.plot(x, stats.norm.pdf(x, data.mean(), data.std()), "r-", lw=2,
             label="Normal teórica")
 
-    ax.set_title("Figura 1. Verificación de normalidad — Sector Residencial (Shapiro-Wilk)")
+    # ax.set_title("Figura 1. Verificación de normalidad — Sector Residencial (Shapiro-Wilk)")
     ax.set_xlabel("Consumo (kWh/mes)")
     ax.set_ylabel("Densidad")
     ax.legend(loc="upper right")
@@ -548,7 +548,7 @@ def plot_boxplot_anova(df, anova_table, eta_sq):
     sns.stripplot(data=df, x="sector", y="consumo_kwh", order=SECTOR_ORDER,
                   color="gray", size=2.5, alpha=0.4, ax=ax)
 
-    ax.set_title("Figura 2. Consumo de energía por sector (ANOVA de un factor)")
+    # ax.set_title("Figura 2. Consumo de energía por sector (ANOVA de un factor)")
     ax.set_xlabel("Sector")
     ax.set_ylabel("Consumo (kWh/mes)")
     ax.text(0.02, 0.97,
@@ -603,7 +603,7 @@ def plot_means_ci(df, tukey_df):
                 fontsize=10, fontweight="bold")
 
     ax.set_ylim(0, max(m + e for m, e in zip(means, errors)) * 1.25)
-    ax.set_title("Figura 3. Consumo medio por sector con IC del 95 % (prueba t / ANOVA)")
+    # ax.set_title("Figura 3. Consumo medio por sector con IC del 95 % (prueba t / ANOVA)")
     ax.set_xlabel("Sector")
     ax.set_ylabel("Consumo medio (kWh/mes)")
     ax.text(0.02, 0.97,
@@ -623,7 +623,7 @@ def plot_regression_seaborn(df, model):
         data=df, x="temperatura_c", y="consumo_kwh",
         scatter_kws={"alpha": 0.4, "s": 18}, line_kws={"color": "red"}, ax=ax,
     )
-    ax.set_title("Figura 4. Relación temperatura vs. consumo (Pearson y regresión OLS)")
+    # ax.set_title("Figura 4. Relación temperatura vs. consumo (Pearson y regresión OLS)")
     ax.set_xlabel("Temperatura promedio (°C)")
     ax.set_ylabel("Consumo (kWh/mes)")
     b0 = model.params["const"]
@@ -653,7 +653,7 @@ def plot_interactive_plotly(df):
         color_discrete_map=SECTOR_COLORS,
         hover_data=["id_cliente", "region"],  # info que aparece al pasar el mouse
         trendline="ols",  # recta de regresion por sector (usa statsmodels)
-        title="Figura 5. Consumo vs. temperatura por sector (interactivo · Plotly)",
+        # title="Figura 5. Consumo vs. temperatura por sector (interactivo · Plotly)",
         labels={"temperatura_c": "Temperatura promedio (°C)",
                 "consumo_kwh": "Consumo (kWh/mes)", "sector": "Sector"},
     )
@@ -692,8 +692,7 @@ def plot_qq_by_sector(df):
         ax.set_xlabel("Cuantiles teóricos")
         ax.set_ylabel("Cuantiles observados")
 
-    fig.suptitle("Figura 6. Diagnóstico gráfico de normalidad por sector (Q-Q plots)",
-                 fontsize=12, fontweight="bold")
+    # fig.suptitle("Figura 6. Diagnóstico gráfico de normalidad por sector (Q-Q plots)", fontsize=12, fontweight="bold")
     fig.tight_layout()
     fig.savefig(f"{FIGURES_DIR}/fig6_qqplots_normalidad.png", dpi=150)
     plt.close(fig)
@@ -743,7 +742,7 @@ def plot_tukey_forest(tukey_df, gh_df):
     ax.set_yticklabels(labels)
     ax.set_ylim(-0.6, len(labels) - 0.4)
     ax.set_xlabel("Diferencia de medias (kWh/mes) con IC del 95 %")
-    ax.set_title("Figura 7. Comparaciones múltiples: Tukey HSD frente a Games-Howell")
+    # ax.set_title("Figura 7. Comparaciones múltiples: Tukey HSD frente a Games-Howell")
     # Las dos diferencias negativas ocupan la mitad izquierda y la positiva la
     # esquina inferior derecha, asi que leyenda y nota van a las zonas libres.
     ax.legend(loc="upper right", fontsize=9, framealpha=0.95)
@@ -792,8 +791,7 @@ def plot_attenuation(regression_df):
         ax.tick_params(axis="x", rotation=18)
         ax.margins(y=0.20)
 
-    fig.suptitle("Figura 8. Descomposición de la atenuación por agregación: "
-                 "$r = b_1\\,s_T/s_Y$", fontsize=12, fontweight="bold")
+    # fig.suptitle("Figura 8. Descomposición de la atenuación por agregación: " "$r = b_1\\,s_T/s_Y$", fontsize=12, fontweight="bold")
     fig.tight_layout()
     fig.savefig(f"{FIGURES_DIR}/fig8_atenuacion.png", dpi=150)
     plt.close(fig)
